@@ -234,17 +234,17 @@ const CountryTracker: React.FC = () => {
     const start = new Date(startDate);
     const end = new Date(endDate);
     const yearStart = new Date(year, 0, 1); // Jan 1 of the year
-    const yearEnd = new Date(year, 11, 31); // Dec 31 of the year
-    
+    const yearEnd = new Date(year + 1, 0, 1); // Jan 1 of NEXT year (exclusive boundary)
+
     // Find the overlap between trip dates and the target year
     const overlapStart = start > yearStart ? start : yearStart;
     const overlapEnd = end < yearEnd ? end : yearEnd;
-    
+
     // If no overlap, return 0
-    if (overlapStart > overlapEnd) {
+    if (overlapStart >= overlapEnd) {
       return 0;
     }
-    
+
     // Calculate days in the overlap period (inclusive of start date, exclusive of end date)
     const diffTime = overlapEnd.getTime() - overlapStart.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
