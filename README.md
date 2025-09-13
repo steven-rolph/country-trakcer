@@ -14,7 +14,7 @@ This application helps individuals and couples track their days spent in differe
 ## ✨ Features
 
 ### 👥 Multi-Traveler Support
-- Track trips for two people (Person 1 & Person 2)
+- Track trips for two people (Cheryl & Nigel)
 - Switch between travelers with a clean toggle interface
 - Separate statistics and trip histories for each person
 - Visual traveler indicators on all trip entries
@@ -24,18 +24,20 @@ This application helps individuals and couples track their days spent in differe
 - Separate statistics per traveler per country
 - Automatic calculation including start and end dates
 - Visual breakdown by country (Greece/UK currently supported)
+- Year-by-year filtering and analysis
 
-### ☁️ GitHub Sync
-- Store data securely in your private GitHub repository
+### ☁️ Redis Cloud Storage
+- Store data securely in Redis cloud database
 - Automatic backup and sync across devices
-- Manual save/load functionality
-- Complete offline capability with local storage
+- API-based data persistence
+- Complete offline capability with local storage fallback
 
 ### 🔐 Data Management
 - **Import/Export**: JSON file backup and restore
-- **Reset Functionality**: Complete data wipe with confirmation
-- **GitHub Integration**: Optional cloud storage and sync
+- **Reset Functionality**: Complete data wipe with admin password protection
+- **Redis Integration**: Cloud storage and sync via API
 - **Data Migration**: Automatic handling of legacy data formats
+- **Activity Logging**: Track all data operations
 
 ### 📱 Mobile Optimized
 - Responsive design works on all devices
@@ -43,11 +45,18 @@ This application helps individuals and couples track their days spent in differe
 - Save to home screen on iOS/Android
 - Touch-friendly interface
 
+### 📄 PDF Export
+- Generate comprehensive travel summaries
+- Multi-year reports with detailed breakdowns
+- Professional formatting for visa applications
+- Automatic day calculations per country per year
+
 ### 🛡️ Security Features
-- Data stored in your own GitHub repository
-- No external services or data collection
+- Data stored in secure Redis cloud database
+- Admin password protection for data reset operations
 - Secure confirmation for destructive actions
 - Local-first with optional cloud sync
+- Activity logging for audit trails
 
 ## 🚀 Getting Started
 
@@ -99,19 +108,18 @@ npm run preview  # Preview production build locally
 
 ## ⚙️ Configuration
 
-### GitHub Integration (Optional)
-1. Create a GitHub Personal Access Token with repo permissions
-2. Click the settings gear in the app header
-3. Enter your GitHub details:
-   - **Token**: Your personal access token
-   - **Owner**: Your GitHub username
-   - **Repository**: Repository name for data storage
-   - **Filename**: Name for the data file (default: country-tracker-data.json)
+### Redis Cloud Integration
+The app automatically connects to a Redis cloud database for data persistence. All data operations include:
+- Automatic sync to cloud storage
+- Local storage fallback for offline use
+- Activity logging for audit trails
+- Admin password protection for sensitive operations
 
 ### Adding Countries
 Currently supports Greece and UK. To add more countries, modify:
 - `src/types.ts` - Update the country union type
 - Component forms and displays - Add new country options
+- `src/utils/pdfGenerator.ts` - Update PDF generation for new countries
 
 ## 🏗️ Architecture
 
@@ -120,6 +128,8 @@ Currently supports Greece and UK. To add more countries, modify:
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
 - **Build Tool**: Vite
+- **PDF Generation**: jsPDF + jsPDF-AutoTable
+- **Cloud Storage**: Redis
 - **Deployment**: Static hosting compatible
 
 ### Project Structure
@@ -127,15 +137,19 @@ Currently supports Greece and UK. To add more countries, modify:
 src/
 ├── components/          # Reusable UI components
 │   ├── Header.tsx          # Main header with actions
-│   ├── TravelerSelector.tsx # Switch between travelers
+│   ├── UserSelector.tsx    # Switch between users (Cheryl/Nigel)
+│   ├── YearSelector.tsx    # Year filtering
 │   ├── StatsCards.tsx      # Statistics display
 │   ├── TripForm.tsx        # Add new trips
 │   ├── TripList.tsx        # Trip history
 │   ├── TripEditor.tsx      # Edit existing trips
-│   ├── GitHubSettings.tsx  # GitHub configuration
 │   ├── LoadingSpinner.tsx  # Loading states
 │   ├── ResetConfirmationModal.tsx # Reset confirmation
 │   └── index.ts           # Component exports
+├── services/           # External services
+│   └── redis.ts           # Redis cloud storage service
+├── utils/             # Utility functions
+│   └── pdfGenerator.ts    # PDF export functionality
 ├── types.ts            # TypeScript definitions
 ├── country-tracker.tsx # Main application component
 ├── App.tsx            # App root
@@ -156,7 +170,7 @@ Trip data is stored as JSON:
   "trips": [
     {
       "id": "1701234567890",
-      "traveler": "Person 1",
+      "user": "Cheryl",
       "country": "Greece",
       "departureDate": "2024-06-15",
       "arrivalDate": "2024-08-30",
@@ -174,6 +188,12 @@ Trip data is stored as JSON:
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+
+### Key Features Usage
+- **PDF Export**: Click the download icon in the header to generate travel summaries
+- **Year Filtering**: Use the year selector to view data for specific years
+- **Data Reset**: Access via settings with admin password protection
+- **User Switching**: Toggle between Cheryl and Nigel using the user selector
 
 ### Adding Features
 1. Create new components in `src/components/`
@@ -201,4 +221,4 @@ This is a personal project. For suggestions or issues, please create an issue in
 
 ---
 
-**Built with ❤️ for tracking travel days and maintaining residence compliance.**
+**Built with ❤️ for Cheryl and Nigel to track their travel days and maintain residence compliance.**
