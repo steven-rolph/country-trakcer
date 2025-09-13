@@ -177,9 +177,9 @@ const CountryTracker: React.FC = () => {
       return 0;
     }
     
-    // Calculate days in the overlap period (inclusive of both start and end dates)
+    // Calculate days in the overlap period (inclusive of start date, exclusive of end date)
     const diffTime = overlapEnd.getTime() - overlapStart.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
   const getAvailableYears = (): number[] => {
