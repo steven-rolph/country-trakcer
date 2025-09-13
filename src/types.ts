@@ -1,8 +1,8 @@
-export type Traveler = 'Person 1' | 'Person 2';
+export type User = 'Steven' | 'Partner';
 
 export type Trip = {
   id: string;
-  traveler: Traveler;
+  user: User;
   country: 'Greece' | 'UK';
   departureDate: string;
   arrivalDate: string;
@@ -14,18 +14,13 @@ export type AppData = {
   lastUpdated: string;
 };
 
-export type GitHubConfig = {
-  token: string;
-  repo: string;
-  owner: string;
-  filename: string;
-};
-
 export type CountryStats = {
   Greece: number;
   UK: number;
 };
 
-export type TravelerStats = {
-  [traveler in Traveler]: CountryStats;
+export type UserStats = {
+  [user in User]: CountryStats;
 };
+
+export type SyncStatus = 'idle' | 'loading' | 'error' | 'connected';

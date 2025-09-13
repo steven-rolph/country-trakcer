@@ -3,32 +3,32 @@ import { AlertTriangle, X } from 'lucide-react';
 
 interface ResetConfirmationModalProps {
   isOpen: boolean;
-  onConfirm: (deleteFromGitHub: boolean) => void;
+  onConfirm: (clearCloudData: boolean) => void;
   onCancel: () => void;
-  hasGitHubConfig: boolean;
+  hasCloudData: boolean;
 }
 
 export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
   isOpen,
   onConfirm,
   onCancel,
-  hasGitHubConfig
+  hasCloudData
 }) => {
   const [confirmationText, setConfirmationText] = useState('');
-  const [deleteFromGitHub, setDeleteFromGitHub] = useState(false);
+  const [clearCloudData, setClearCloudData] = useState(false);
 
   const handleConfirm = () => {
     if (confirmationText === 'RESET') {
-      onConfirm(deleteFromGitHub);
+      onConfirm(clearCloudData);
       setConfirmationText('');
-      setDeleteFromGitHub(false);
+      setClearCloudData(false);
     }
   };
 
   const handleCancel = () => {
     onCancel();
     setConfirmationText('');
-    setDeleteFromGitHub(false);
+    setClearCloudData(false);
   };
 
   if (!isOpen) return null;
@@ -56,32 +56,32 @@ export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
             This action will permanently delete:
           </p>
           <ul className="text-sm text-gray-500 space-y-1 mb-4 ml-4">
-            <li>• All trip data for both travelers</li>
-            <li>• GitHub configuration settings</li>
+            <li>• All trip data for both users</li>
+            <li>• User preferences</li>
             <li>• All locally stored data</li>
-            {hasGitHubConfig && deleteFromGitHub && (
-              <li className="text-red-600 font-medium">• Data file from GitHub repository</li>
+            {hasCloudData && clearCloudData && (
+              <li className="text-red-600 font-medium">• Data from cloud storage</li>
             )}
           </ul>
 
-          {hasGitHubConfig && (
+          {hasCloudData && (
             <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <div className="flex items-center mb-2">
                 <input
                   type="checkbox"
-                  id="deleteFromGitHub"
-                  checked={deleteFromGitHub}
-                  onChange={(e) => setDeleteFromGitHub(e.target.checked)}
+                  id="clearCloudData"
+                  checked={clearCloudData}
+                  onChange={(e) => setClearCloudData(e.target.checked)}
                   className="mr-2"
                 />
-                <label htmlFor="deleteFromGitHub" className="text-sm font-medium text-gray-700">
-                  Also delete data file from GitHub repository
+                <label htmlFor="clearCloudData" className="text-sm font-medium text-gray-700">
+                  Also clear data from cloud storage
                 </label>
               </div>
               <p className="text-xs text-gray-600">
-                {deleteFromGitHub 
-                  ? "⚠️ This will permanently delete the data file from your GitHub repo"
-                  : "ℹ️ Data file will remain in GitHub and can be loaded later"
+                {clearCloudData 
+                  ? "⚠️ This will permanently delete all data from cloud storage"
+                  : "ℹ️ Cloud data will remain and will be reloaded next time you open the app"
                 }
               </p>
             </div>

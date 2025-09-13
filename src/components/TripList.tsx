@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, Download, Upload, Edit3, Trash2 } from 'lucide-react';
-import type { Trip } from '../types';
+import type { Trip, User } from '../types';
 import { TripEditor } from './TripEditor';
 
 interface TripListProps {
@@ -13,6 +13,7 @@ interface TripListProps {
   onExportData: () => void;
   onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
   calculateDays: (startDate: string, endDate: string) => number;
+  getUserColor: (user: User) => string;
 }
 
 export const TripList: React.FC<TripListProps> = ({
@@ -24,7 +25,8 @@ export const TripList: React.FC<TripListProps> = ({
   onCancelEdit,
   onExportData,
   onImportData,
-  calculateDays
+  calculateDays,
+  getUserColor
 }) => {
   const sortedTrips = [...trips].sort((a, b) => 
     new Date(b.departureDate).getTime() - new Date(a.departureDate).getTime()
@@ -73,14 +75,14 @@ export const TripList: React.FC<TripListProps> = ({
                   onCancel={onCancelEdit}
                 />
               ) : (
-                <div className="flex items-center justify-between">
+                <div className={`flex items-center justify-between border-l-4 ${getUserColor(trip.user)} pl-4`}>
                   <div className="flex items-center space-x-4">
                     <div className={`w-3 h-3 rounded-full ${trip.country === 'Greece' ? 'bg-blue-500' : 'bg-red-500'}`}></div>
                     <div>
                       <div className="flex items-center space-x-2">
                         <p className="font-medium">{trip.country}</p>
-                        <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
-                          {trip.traveler}
+                        <span className={`px-2 py-1 text-xs rounded-full ${trip.user === 'Steven' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                          {trip.user}
                         </span>
                       </div>
                       <p className="text-sm text-gray-600">

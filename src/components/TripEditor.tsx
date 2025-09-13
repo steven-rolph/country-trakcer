@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Save, X } from 'lucide-react';
-import type { Trip, Traveler } from '../types';
+import type { Trip, User } from '../types';
 
 interface TripEditorProps {
   trip: Trip;
@@ -10,28 +10,31 @@ interface TripEditorProps {
 
 export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }) => {
   const [editedTrip, setEditedTrip] = useState<Partial<Trip>>({
-    traveler: trip.traveler,
+    user: trip.user,
     country: trip.country,
     departureDate: trip.departureDate,
     arrivalDate: trip.arrivalDate,
     notes: trip.notes
   });
 
+  const getUserColor = (user: User) => user === 'Steven' ? 'blue' : 'green';
+  const userColor = getUserColor(trip.user);
+
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <select
-          value={editedTrip.traveler}
-          onChange={(e) => setEditedTrip({ ...editedTrip, traveler: e.target.value as Traveler })}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          value={editedTrip.user}
+          onChange={(e) => setEditedTrip({ ...editedTrip, user: e.target.value as User })}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
         >
-          <option value="Person 1">Person 1</option>
-          <option value="Person 2">Person 2</option>
+          <option value="Steven">Steven</option>
+          <option value="Partner">Partner</option>
         </select>
         <select
           value={editedTrip.country}
           onChange={(e) => setEditedTrip({ ...editedTrip, country: e.target.value as 'Greece' | 'UK' })}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
         >
           <option value="Greece">Greece</option>
           <option value="UK">UK</option>
@@ -40,26 +43,26 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
           type="date"
           value={editedTrip.departureDate}
           onChange={(e) => setEditedTrip({ ...editedTrip, departureDate: e.target.value })}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
         />
         <input
           type="date"
           value={editedTrip.arrivalDate}
           onChange={(e) => setEditedTrip({ ...editedTrip, arrivalDate: e.target.value })}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        />
-        <input
-          type="text"
-          placeholder="Notes"
-          value={editedTrip.notes || ''}
-          onChange={(e) => setEditedTrip({ ...editedTrip, notes: e.target.value })}
-          className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
         />
       </div>
+      <input
+        type="text"
+        placeholder="Notes"
+        value={editedTrip.notes || ''}
+        onChange={(e) => setEditedTrip({ ...editedTrip, notes: e.target.value })}
+        className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+      />
       <div className="flex space-x-2">
         <button
           onClick={() => onSave(editedTrip)}
-          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center"
+          className={`px-4 py-2 bg-${userColor}-600 text-white rounded-lg hover:bg-${userColor}-700 flex items-center`}
         >
           <Save className="w-4 h-4 mr-2" />
           Save
