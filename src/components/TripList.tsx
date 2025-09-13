@@ -82,7 +82,7 @@ export const TripList: React.FC<TripListProps> = ({
               ) : (
                 <div className={`flex items-center justify-between border-l-4 ${getUserColor(trip.user)} pl-4`}>
                   <div className="flex items-center space-x-4">
-                    <div className="text-lg">
+                    <div className="text-2xl">
                       {trip.country === 'Greece' ? '🇬🇷' : '🇬🇧'}
                     </div>
                     <div>
