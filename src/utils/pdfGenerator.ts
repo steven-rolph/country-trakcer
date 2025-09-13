@@ -34,7 +34,7 @@ const calculateDaysInYear = (startDate: string, endDate: string, year: number): 
   }
   
   const diffTime = overlapEnd.getTime() - overlapStart.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end days
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
 const formatDate = (dateString: string): string => {
