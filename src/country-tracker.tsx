@@ -322,6 +322,7 @@ const CountryTracker: React.FC = () => {
         <YearSelector
           selectedYear={selectedYear}
           availableYears={availableYears}
+          selectedUser={selectedUser}
           onYearChange={setSelectedYear}
         />
 
