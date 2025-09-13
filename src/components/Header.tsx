@@ -29,16 +29,16 @@ export const Header: React.FC<HeaderProps> = ({
   const syncInfo = getSyncStatusInfo(syncStatus);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
           <MapPin className="w-8 h-8 text-blue-600" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Travel Day Tracker</h1>
-            <p className="text-gray-600">Automatic cloud sync with simple user switching</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Travel Day Tracker</h1>
+            <p className="text-sm sm:text-base text-gray-600">Automatic cloud sync with simple user switching</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-center sm:justify-end gap-4">
           <div className={`flex items-center gap-2 text-sm ${syncInfo.color}`}>
             <span className="text-base">{syncInfo.icon}</span>
             <span className="font-medium">{syncInfo.text}</span>
@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onResetClick}
             disabled={loading}
-            className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50"
+            className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg disabled:opacity-50 transition-colors"
             title="Reset All Data"
           >
             <RotateCcw className="w-5 h-5" />

@@ -14,12 +14,8 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats, totalTrips, selec
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center">
-          <div className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 ${
-            selectedUser === 'Cheryl' ? 'bg-blue-100' : 'bg-green-100'
-          }`}>
-            <MapPin className={`w-6 h-6 ${
-              selectedUser === 'Cheryl' ? 'text-blue-600' : 'text-green-600'
-            }`} />
+          <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+            <MapPin className="w-6 h-6 text-blue-600" />
           </div>
           <div>
             <p className="text-sm font-medium text-gray-600">{selectedUser} - Greece ({new Date().getFullYear()})</p>
@@ -44,7 +40,7 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats, totalTrips, selec
             selectedUser === 'Cheryl' ? 'bg-blue-100' : 'bg-green-100'
           }`}>
             <Calendar className={`w-6 h-6 ${
-              selectedUser === 'Cheryl' ? 'text-blue-600' : 'text-green-600'
+              selectedUser === 'Cheryl' ? 'text-blue-700' : 'text-green-700'
             }`} />
           </div>
           <div>

@@ -68,8 +68,8 @@ export const TripForm: React.FC<TripFormProps> = ({
         onClick={onAddTrip}
         className={`mt-4 px-4 py-2 text-white rounded-lg flex items-center ${
           selectedUser === 'Cheryl'
-            ? 'bg-blue-600 hover:bg-blue-700'
-            : 'bg-green-600 hover:bg-green-700'
+            ? 'bg-blue-700 hover:bg-blue-800'
+            : 'bg-green-700 hover:bg-green-800'
         }`}
       >
         <Plus className="w-4 h-4 mr-2" />
