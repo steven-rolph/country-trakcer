@@ -11,6 +11,7 @@ import {
   ResetConfirmationModal
 } from './components';
 import { redisService } from './services/redis';
+import { generateTravelSummaryPDF } from './utils/pdfGenerator';
 
 const CountryTracker: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
@@ -131,6 +132,10 @@ const CountryTracker: React.FC = () => {
     a.href = url;
     a.download = `country-tracker-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
+  };
+
+  const generatePDF = () => {
+    generateTravelSummaryPDF(trips);
   };
 
   const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -343,6 +348,7 @@ const CountryTracker: React.FC = () => {
           onCancelEdit={() => setEditingTrip(null)}
           onExportData={exportData}
           onImportData={importData}
+          onGeneratePDF={generatePDF}
           calculateDays={calculateDays}
           getUserColor={getUserColor}
         />

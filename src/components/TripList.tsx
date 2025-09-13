@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Download, Upload, Edit3, Trash2 } from 'lucide-react';
+import { MapPin, Download, Upload, Edit3, Trash2, FileText } from 'lucide-react';
 import type { Trip, User } from '../types';
 import { TripEditor } from './TripEditor';
 
@@ -12,6 +12,7 @@ interface TripListProps {
   onCancelEdit: () => void;
   onExportData: () => void;
   onImportData: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onGeneratePDF: () => void;
   calculateDays: (startDate: string, endDate: string) => number;
   getUserColor: (user: User) => string;
 }
@@ -25,6 +26,7 @@ export const TripList: React.FC<TripListProps> = ({
   onCancelEdit,
   onExportData,
   onImportData,
+  onGeneratePDF,
   calculateDays,
   getUserColor
 }) => {
@@ -43,6 +45,13 @@ export const TripList: React.FC<TripListProps> = ({
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold">Trip History</h2>
           <div className="flex space-x-2">
+            <button
+              onClick={onGeneratePDF}
+              className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg flex items-center"
+            >
+              <FileText className="w-4 h-4 mr-1" />
+              PDF Download
+            </button>
             <button
               onClick={onExportData}
               className="px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg flex items-center"
