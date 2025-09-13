@@ -7,3 +7,4 @@ export { LoadingSpinner } from './LoadingSpinner';
 export { UserSelector } from './UserSelector';
 export { YearSelector } from './YearSelector';
 export { ResetConfirmationModal } from './ResetConfirmationModal';
+export { DeleteTripModal } from './DeleteTripModal';

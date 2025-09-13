@@ -8,7 +8,8 @@ import {
   LoadingSpinner,
   UserSelector,
   YearSelector,
-  ResetConfirmationModal
+  ResetConfirmationModal,
+  DeleteTripModal
 } from './components';
 import { redisService } from './services/redis';
 import { generateTravelSummaryPDF } from './utils/pdfGenerator';
@@ -18,6 +19,8 @@ const CountryTracker: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User>('Cheryl');
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [tripToDelete, setTripToDelete] = useState<Trip | null>(null);
   const [loading, setLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle');
   const [editingTrip, setEditingTrip] = useState<string | null>(null);
@@ -117,13 +120,58 @@ const CountryTracker: React.FC = () => {
     await redisService.logActivity('add_trip', selectedUser, `Added trip to ${trip.country}`);
   };
 
-  const deleteTrip = async (id: string) => {
+  const deleteTrip = (id: string) => {
     const trip = trips.find(t => t.id === id);
-    setTrips(trips.filter(trip => trip.id !== id));
-    
     if (trip) {
-      await redisService.logActivity('delete_trip', trip.user, `Deleted trip to ${trip.country}`);
+      setTripToDelete(trip);
+      setShowDeleteModal(true);
     }
+  };
+
+  const confirmDeleteTrip = async (adminPassword: string) => {
+    if (!tripToDelete) return;
+
+    try {
+      setLoading(true);
+
+      // Check admin password by attempting a test API call
+      // This will fail if the password is wrong
+      await fetch('/api/trips?action=clear-all', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          adminPassword: adminPassword
+        })
+      }).then(async response => {
+        if (response.status === 401) {
+          throw new Error('Invalid admin password');
+        }
+        // Don't actually clear data - we just want to validate the password
+      });
+
+      // If we get here, password is valid - proceed with deletion
+      setTrips(trips.filter(trip => trip.id !== tripToDelete.id));
+      await redisService.logActivity('delete_trip', tripToDelete.user, `Deleted trip to ${tripToDelete.country}`);
+
+      setShowDeleteModal(false);
+      setTripToDelete(null);
+    } catch (error: any) {
+      if (error.message.includes('Invalid admin password')) {
+        alert('Invalid admin password. Please try again.');
+      } else {
+        console.error('Error deleting trip:', error);
+        alert('Error deleting trip. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const cancelDeleteTrip = () => {
+    setShowDeleteModal(false);
+    setTripToDelete(null);
   };
 
   const updateTrip = async (id: string, updatedTrip: Partial<Trip>) => {
@@ -384,6 +432,13 @@ const CountryTracker: React.FC = () => {
           onCancel={() => setShowResetModal(false)}
           hasCloudData={syncStatus === 'connected'}
           adminMode={adminMode}
+        />
+
+        <DeleteTripModal
+          isOpen={showDeleteModal}
+          trip={tripToDelete}
+          onConfirm={confirmDeleteTrip}
+          onCancel={cancelDeleteTrip}
         />
       </div>
     </div>
