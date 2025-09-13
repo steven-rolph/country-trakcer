@@ -113,9 +113,9 @@ export const generateTravelSummaryPDF = (trips: Trip[]): void => {
   
   yPosition += 25;
   
-  yearSummaries.forEach((yearSummary) => {
-    // Check if we need a new page
-    if (yPosition > 250) {
+  yearSummaries.forEach((yearSummary, index) => {
+    // Add new page for each year (except the first one)
+    if (index > 0) {
       doc.addPage();
       yPosition = 20;
     }
@@ -132,10 +132,19 @@ export const generateTravelSummaryPDF = (trips: Trip[]): void => {
     (['Cheryl', 'Nigel'] as User[]).forEach(user => {
       const userData = yearSummary.users[user];
       
-      // Add user header row
+      // Add user header row with proper spanning and color
+      const userColor = user === 'Cheryl' ? [66, 139, 202] : [92, 184, 92]; // Darker blue/green
       tableData.push([
-        { content: user, styles: { fontStyle: 'bold', fillColor: user === 'Cheryl' ? [173, 216, 230] : [144, 238, 144] } },
-        '', '', '', ''
+        { 
+          content: user, 
+          colSpan: 5,
+          styles: { 
+            fontStyle: 'bold', 
+            fillColor: userColor,
+            textColor: [255, 255, 255],
+            halign: 'center'
+          } 
+        }
       ]);
       
       // Sort trips by departure date
@@ -147,10 +156,9 @@ export const generateTravelSummaryPDF = (trips: Trip[]): void => {
         tableData.push(['', 'No trips', '', '', '']);
       } else {
         sortedTrips.forEach(trip => {
-          const flag = trip.country === 'Greece' ? '🇬🇷' : '🇬🇧';
           tableData.push([
             '',
-            `${flag} ${trip.country}`,
+            trip.country,
             formatDate(trip.departureDate),
             formatDate(trip.arrivalDate),
             `${trip.days} days`
@@ -194,8 +202,6 @@ export const generateTravelSummaryPDF = (trips: Trip[]): void => {
         4: { cellWidth: 30 }
       }
     });
-    
-    yPosition = (doc as any).lastAutoTable.finalY + 15;
   });
   
   // Summary page if multiple years
