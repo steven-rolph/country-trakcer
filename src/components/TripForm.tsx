@@ -21,7 +21,7 @@ export const TripForm: React.FC<TripFormProps> = ({
         <Plus className="w-5 h-5 mr-2" />
         Add New Trip for {selectedUser}
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <select
           value={newTrip.country}
           onChange={(e) => onTripChange({ ...newTrip, country: e.target.value as 'Greece' | 'UK' })}

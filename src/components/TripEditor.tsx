@@ -20,7 +20,7 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <select
           value={editedTrip.user}
           onChange={(e) => setEditedTrip({ ...editedTrip, user: e.target.value as User })}
@@ -77,10 +77,10 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
             : 'focus:ring-green-500 focus:border-green-500'
         }`}
       />
-      <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <button
           onClick={() => onSave(editedTrip)}
-          className={`px-4 py-2 text-white rounded-lg flex items-center ${
+          className={`px-4 py-2 text-white rounded-lg flex items-center justify-center ${
             trip.user === 'Cheryl'
               ? 'bg-blue-600 hover:bg-blue-700'
               : 'bg-green-600 hover:bg-green-700'
@@ -91,7 +91,7 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
         </button>
         <button
           onClick={onCancel}
-          className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg flex items-center"
+          className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg flex items-center justify-center border border-gray-300"
         >
           <X className="w-4 h-4 mr-2" />
           Cancel

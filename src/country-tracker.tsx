@@ -241,18 +241,18 @@ const CountryTracker: React.FC = () => {
   const filteredTrips = getFilteredTrips(selectedUser);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
       <div className="max-w-4xl mx-auto">
         <Header
           onResetClick={() => setShowResetModal(true)}
           loading={loading}
+          syncStatus={syncStatus}
         />
 
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6">
           <UserSelector
             selectedUser={selectedUser}
             onUserChange={handleUserChange}
-            syncStatus={syncStatus}
           />
         </div>
 

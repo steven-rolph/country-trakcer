@@ -11,7 +11,7 @@ interface StatsCardsProps {
 export const StatsCards: React.FC<StatsCardsProps> = ({ stats, totalTrips, selectedUser }) => {
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center">
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 ${
