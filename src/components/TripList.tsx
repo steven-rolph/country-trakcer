@@ -28,6 +28,15 @@ export const TripList: React.FC<TripListProps> = ({
   calculateDays,
   getUserColor
 }) => {
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
   const sortedTrips = [...trips].sort((a, b) => 
     new Date(b.departureDate).getTime() - new Date(a.departureDate).getTime()
   );
@@ -86,7 +95,7 @@ export const TripList: React.FC<TripListProps> = ({
                         </span>
                       </div>
                       <p className="text-sm text-gray-600">
-                        {trip.departureDate} to {trip.arrivalDate}
+                        {formatDate(trip.departureDate)} to {formatDate(trip.arrivalDate)}
                         <span className="ml-2 text-gray-400">
                           ({calculateDays(trip.departureDate, trip.arrivalDate)} days)
                         </span>

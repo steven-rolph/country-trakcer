@@ -180,7 +180,12 @@ const CountryTracker: React.FC = () => {
   };
 
   const getFilteredTrips = (user: User) => {
-    return trips.filter(trip => trip.user === user);
+    return trips
+      .filter(trip => trip.user === user)
+      .sort((a, b) => {
+        // Sort by departure date, newest first
+        return new Date(b.departureDate).getTime() - new Date(a.departureDate).getTime();
+      });
   };
 
   const getUserColor = (user: User): string => {
