@@ -6,6 +6,7 @@ interface HeaderProps {
   onResetClick: () => void;
   loading: boolean;
   syncStatus: SyncStatus;
+  adminMode: boolean;
 }
 
 const getSyncStatusInfo = (status: SyncStatus) => {
@@ -24,7 +25,8 @@ const getSyncStatusInfo = (status: SyncStatus) => {
 export const Header: React.FC<HeaderProps> = ({
   onResetClick,
   loading,
-  syncStatus
+  syncStatus,
+  adminMode
 }) => {
   const syncInfo = getSyncStatusInfo(syncStatus);
 
@@ -32,7 +34,12 @@ export const Header: React.FC<HeaderProps> = ({
     <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-3">
-          <MapPin className="w-8 h-8 text-blue-600" />
+          <div className="relative">
+            <MapPin className="w-8 h-8 text-blue-600" />
+            {adminMode && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+            )}
+          </div>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Travel Day Tracker</h1>
             <p className="text-sm sm:text-base text-gray-600">Automatic cloud sync with simple user switching</p>

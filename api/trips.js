@@ -125,6 +125,13 @@ async function handleDelete(client, req, res) {
   
   switch (action) {
     case 'clear-all':
+      const { adminPassword } = req.body;
+      
+      // Validate admin password if provided
+      if (adminPassword !== undefined && adminPassword !== process.env.ADMIN_DELETE_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized: Invalid admin password' });
+      }
+      
       await client.del('country-tracker:trips');
       await client.del('country-tracker:lastUpdated');
       await client.del('country-tracker:activity');

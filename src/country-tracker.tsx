@@ -21,6 +21,7 @@ const CountryTracker: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle');
   const [editingTrip, setEditingTrip] = useState<string | null>(null);
+  const [adminMode, setAdminMode] = useState(false);
   const [newTrip, setNewTrip] = useState<Partial<Trip>>({
     user: 'Cheryl',
     country: 'Greece',
@@ -38,6 +39,20 @@ const CountryTracker: React.FC = () => {
     }
     loadData();
   }, []);
+
+  // Admin mode keyboard listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+        e.preventDefault();
+        setAdminMode(!adminMode);
+        console.log(`Admin mode ${!adminMode ? 'activated' : 'deactivated'}`);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [adminMode]);
 
   const saveData = useCallback(async () => {
     setSyncStatus('loading');
@@ -249,14 +264,14 @@ const CountryTracker: React.FC = () => {
     localStorage.setItem('selected-user', user);
   };
 
-  const handleResetAllData = async (clearCloudData: boolean) => {
+  const handleResetAllData = async (clearCloudData: boolean, adminPassword?: string) => {
     setLoading(true);
     setSyncStatus('loading');
 
     try {
       // Clear cloud data if requested
       if (clearCloudData) {
-        await redisService.clearAllData();
+        await redisService.clearAllData(adminPassword);
         // Ensure empty trips array is saved to cloud after clearing
         await redisService.saveTrips([]);
       }
@@ -291,8 +306,14 @@ const CountryTracker: React.FC = () => {
       setSyncStatus('idle');
     } catch (error) {
       console.error('Reset error:', error);
-      alert('Reset completed with errors. Some data may not have been cleared.');
-      setSyncStatus('error');
+      
+      if (error instanceof Error && error.message.includes('Unauthorized')) {
+        alert('Invalid admin password. Cloud data was not cleared.');
+        setSyncStatus('error');
+      } else {
+        alert('Reset completed with errors. Some data may not have been cleared.');
+        setSyncStatus('error');
+      }
     } finally {
       setLoading(false);
     }
@@ -310,6 +331,7 @@ const CountryTracker: React.FC = () => {
           onResetClick={() => setShowResetModal(true)}
           loading={loading}
           syncStatus={syncStatus}
+          adminMode={adminMode}
         />
 
         <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6">
@@ -361,6 +383,7 @@ const CountryTracker: React.FC = () => {
           onConfirm={handleResetAllData}
           onCancel={() => setShowResetModal(false)}
           hasCloudData={syncStatus === 'connected'}
+          adminMode={adminMode}
         />
       </div>
     </div>

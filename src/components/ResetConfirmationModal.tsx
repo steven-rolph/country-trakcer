@@ -3,25 +3,29 @@ import { AlertTriangle, X } from 'lucide-react';
 
 interface ResetConfirmationModalProps {
   isOpen: boolean;
-  onConfirm: (clearCloudData: boolean) => void;
+  onConfirm: (clearCloudData: boolean, adminPassword?: string) => void;
   onCancel: () => void;
   hasCloudData: boolean;
+  adminMode: boolean;
 }
 
 export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
   isOpen,
   onConfirm,
   onCancel,
-  hasCloudData
+  hasCloudData,
+  adminMode
 }) => {
   const [confirmationText, setConfirmationText] = useState('');
   const [clearCloudData, setClearCloudData] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
 
   const handleConfirm = () => {
     if (confirmationText === 'RESET') {
-      onConfirm(clearCloudData);
+      onConfirm(clearCloudData, adminPassword);
       setConfirmationText('');
       setClearCloudData(false);
+      setAdminPassword('');
     }
   };
 
@@ -29,6 +33,7 @@ export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
     onCancel();
     setConfirmationText('');
     setClearCloudData(false);
+    setAdminPassword('');
   };
 
   if (!isOpen) return null;
@@ -64,7 +69,7 @@ export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
             )}
           </ul>
 
-          {hasCloudData && (
+          {hasCloudData && adminMode && (
             <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
               <div className="flex items-center mb-2">
                 <input
@@ -78,12 +83,27 @@ export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
                   Also clear data from cloud storage
                 </label>
               </div>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-gray-600 mb-3">
                 {clearCloudData 
                   ? "⚠️ This will permanently delete all data from cloud storage"
                   : "ℹ️ Cloud data will remain and will be reloaded next time you open the app"
                 }
               </p>
+              {clearCloudData && (
+                <div className="mt-3">
+                  <label htmlFor="adminPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                    Admin Password:
+                  </label>
+                  <input
+                    type="password"
+                    id="adminPassword"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    placeholder="Enter admin password"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-sm"
+                  />
+                </div>
+              )}
             </div>
           )}
 

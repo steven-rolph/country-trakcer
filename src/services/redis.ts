@@ -143,14 +143,21 @@ class RedisService {
     }
   }
 
-  async clearAllData(): Promise<SyncStatus> {
+  async clearAllData(adminPassword?: string): Promise<SyncStatus> {
     try {
       const response = await fetch(`${this.apiBaseUrl}?action=clear-all`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          adminPassword
+        })
       });
       
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        const error = await response.json();
+        throw new Error(error.error || `API error: ${response.status}`);
       }
 
       const result = await response.json();
@@ -164,7 +171,12 @@ class RedisService {
     } catch (error) {
       console.error('Failed to clear data:', error);
       
-      // Try to clear localStorage anyway
+      // Re-throw auth errors
+      if (error instanceof Error && error.message.includes('Unauthorized')) {
+        throw error;
+      }
+      
+      // Try to clear localStorage anyway for other errors
       try {
         localStorage.removeItem(this.getFallbackKey('trips'));
         localStorage.removeItem(this.getFallbackKey('lastUpdated'));
