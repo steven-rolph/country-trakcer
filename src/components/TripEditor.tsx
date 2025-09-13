@@ -17,8 +17,6 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
     notes: trip.notes
   });
 
-  const getUserColor = (user: User) => user === 'Steven' ? 'blue' : 'green';
-  const userColor = getUserColor(trip.user);
 
   return (
     <div className="space-y-4">
@@ -26,7 +24,11 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
         <select
           value={editedTrip.user}
           onChange={(e) => setEditedTrip({ ...editedTrip, user: e.target.value as User })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            trip.user === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         >
           <option value="Steven">Steven</option>
           <option value="Partner">Partner</option>
@@ -34,7 +36,11 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
         <select
           value={editedTrip.country}
           onChange={(e) => setEditedTrip({ ...editedTrip, country: e.target.value as 'Greece' | 'UK' })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            trip.user === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         >
           <option value="Greece">Greece</option>
           <option value="UK">UK</option>
@@ -43,13 +49,21 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
           type="date"
           value={editedTrip.departureDate}
           onChange={(e) => setEditedTrip({ ...editedTrip, departureDate: e.target.value })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            trip.user === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         />
         <input
           type="date"
           value={editedTrip.arrivalDate}
           onChange={(e) => setEditedTrip({ ...editedTrip, arrivalDate: e.target.value })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            trip.user === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         />
       </div>
       <input
@@ -57,12 +71,20 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
         placeholder="Notes"
         value={editedTrip.notes || ''}
         onChange={(e) => setEditedTrip({ ...editedTrip, notes: e.target.value })}
-        className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+        className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+          trip.user === 'Steven'
+            ? 'focus:ring-blue-500 focus:border-blue-500'
+            : 'focus:ring-green-500 focus:border-green-500'
+        }`}
       />
       <div className="flex space-x-2">
         <button
           onClick={() => onSave(editedTrip)}
-          className={`px-4 py-2 bg-${userColor}-600 text-white rounded-lg hover:bg-${userColor}-700 flex items-center`}
+          className={`px-4 py-2 text-white rounded-lg flex items-center ${
+            trip.user === 'Steven'
+              ? 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-green-600 hover:bg-green-700'
+          }`}
         >
           <Save className="w-4 h-4 mr-2" />
           Save

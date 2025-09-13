@@ -1,10 +1,10 @@
 import type { Trip, SyncStatus } from '../types';
 
 class RedisService {
+  private apiBaseUrl = '/api/trips';
+
   constructor() {
-    // For now, we'll use localStorage as the primary storage
-    // This ensures the app works reliably while we set up proper cloud storage
-    console.log('Using localStorage as primary storage');
+    console.log('Using Redis via API endpoints');
   }
 
   private getFallbackKey(key: string): string {
@@ -12,36 +12,74 @@ class RedisService {
   }
 
   async saveTrips(trips: Trip[]): Promise<SyncStatus> {
-    const timestamp = new Date().toISOString();
-    
     try {
-      localStorage.setItem(this.getFallbackKey('trips'), JSON.stringify(trips));
-      localStorage.setItem(this.getFallbackKey('lastUpdated'), timestamp);
-      return 'idle' as SyncStatus;
+      const response = await fetch(this.apiBaseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'save',
+          trips
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result.status || 'connected';
     } catch (error) {
       console.error('Failed to save trips:', error);
-      return 'error' as SyncStatus;
+      
+      // Fallback to localStorage
+      try {
+        localStorage.setItem(this.getFallbackKey('trips'), JSON.stringify(trips));
+        localStorage.setItem(this.getFallbackKey('lastUpdated'), new Date().toISOString());
+        return 'idle';
+      } catch (fallbackError) {
+        console.error('Failed to save to localStorage:', fallbackError);
+        return 'error';
+      }
     }
   }
 
   async loadTrips(): Promise<{ trips: Trip[]; lastUpdated: string; status: SyncStatus }> {
     try {
-      const tripsData = localStorage.getItem(this.getFallbackKey('trips'));
-      const lastUpdated = localStorage.getItem(this.getFallbackKey('lastUpdated'));
+      const response = await fetch(`${this.apiBaseUrl}?action=load`);
       
-      const trips = tripsData ? JSON.parse(tripsData) : [];
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const result = await response.json();
       return {
-        trips,
-        lastUpdated: lastUpdated || new Date().toISOString(),
-        status: 'idle' as SyncStatus
+        trips: result.trips || [],
+        lastUpdated: result.lastUpdated || new Date().toISOString(),
+        status: result.status || 'connected'
       };
     } catch (error) {
-      console.error('Failed to load trips:', error);
-      return {
-        trips: [],
-        lastUpdated: new Date().toISOString(),
-        status: 'error' as SyncStatus
-      };
+      console.error('Failed to load trips from API:', error);
+      
+      // Fallback to localStorage
+      try {
+        const tripsData = localStorage.getItem(this.getFallbackKey('trips'));
+        const lastUpdated = localStorage.getItem(this.getFallbackKey('lastUpdated'));
+        
+        return {
+          trips: tripsData ? JSON.parse(tripsData) : [],
+          lastUpdated: lastUpdated || new Date().toISOString(),
+          status: 'idle'
+        };
+      } catch (fallbackError) {
+        console.error('Failed to load from localStorage:', fallbackError);
+        return {
+          trips: [],
+          lastUpdated: new Date().toISOString(),
+          status: 'error'
+        };
+      }
     }
   }
 
@@ -65,39 +103,87 @@ class RedisService {
 
   async logActivity(action: string, user: string, details: string): Promise<void> {
     const activity = {
-      timestamp: new Date().toISOString(),
       action,
       user,
       details
     };
 
     try {
-      const existing = localStorage.getItem(this.getFallbackKey('activity')) || '[]';
-      const activities = JSON.parse(existing);
-      activities.push(activity);
-      
-      // Keep only last 100 activities
-      const recentActivities = activities.slice(-100);
-      localStorage.setItem(this.getFallbackKey('activity'), JSON.stringify(recentActivities));
+      const response = await fetch(this.apiBaseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'log-activity',
+          activity
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
     } catch (error) {
-      console.error('Failed to log activity:', error);
+      console.error('Failed to log activity to API:', error);
+      
+      // Fallback to localStorage
+      try {
+        const existing = localStorage.getItem(this.getFallbackKey('activity')) || '[]';
+        const activities = JSON.parse(existing);
+        activities.push({
+          timestamp: new Date().toISOString(),
+          ...activity
+        });
+        
+        const recentActivities = activities.slice(-100);
+        localStorage.setItem(this.getFallbackKey('activity'), JSON.stringify(recentActivities));
+      } catch (fallbackError) {
+        console.error('Failed to log activity to localStorage:', fallbackError);
+      }
     }
   }
 
   async clearAllData(): Promise<SyncStatus> {
     try {
+      const response = await fetch(`${this.apiBaseUrl}?action=clear-all`, {
+        method: 'DELETE'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      
+      // Also clear localStorage as fallback
       localStorage.removeItem(this.getFallbackKey('trips'));
       localStorage.removeItem(this.getFallbackKey('lastUpdated'));
       localStorage.removeItem(this.getFallbackKey('activity'));
-      return 'idle' as SyncStatus;
+      
+      return result.status || 'connected';
     } catch (error) {
       console.error('Failed to clear data:', error);
-      return 'error' as SyncStatus;
+      
+      // Try to clear localStorage anyway
+      try {
+        localStorage.removeItem(this.getFallbackKey('trips'));
+        localStorage.removeItem(this.getFallbackKey('lastUpdated'));
+        localStorage.removeItem(this.getFallbackKey('activity'));
+        return 'idle';
+      } catch (fallbackError) {
+        console.error('Failed to clear localStorage:', fallbackError);
+        return 'error';
+      }
     }
   }
 
-  getConnectionStatus(): SyncStatus {
-    return 'idle'; // Always return idle since we're using localStorage
+  async getConnectionStatus(): Promise<SyncStatus> {
+    try {
+      const response = await fetch(`${this.apiBaseUrl}?action=load`);
+      return response.ok ? 'connected' : 'error';
+    } catch {
+      return 'error';
+    }
   }
 }
 

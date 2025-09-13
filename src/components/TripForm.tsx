@@ -15,9 +15,6 @@ export const TripForm: React.FC<TripFormProps> = ({
   onTripChange,
   onAddTrip
 }) => {
-  const getUserColor = (user: User) => user === 'Steven' ? 'blue' : 'green';
-  const userColor = getUserColor(selectedUser);
-  
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
       <h2 className="text-lg font-semibold mb-4 flex items-center">
@@ -38,26 +35,42 @@ export const TripForm: React.FC<TripFormProps> = ({
           placeholder="Departure Date"
           value={newTrip.departureDate}
           onChange={(e) => onTripChange({ ...newTrip, departureDate: e.target.value })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            selectedUser === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         />
         <input
           type="date"
           placeholder="Arrival Date"
           value={newTrip.arrivalDate}
           onChange={(e) => onTripChange({ ...newTrip, arrivalDate: e.target.value })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            selectedUser === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         />
         <input
           type="text"
           placeholder="Notes (optional)"
           value={newTrip.notes}
           onChange={(e) => onTripChange({ ...newTrip, notes: e.target.value })}
-          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-${userColor}-500 focus:border-${userColor}-500`}
+          className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
+            selectedUser === 'Steven'
+              ? 'focus:ring-blue-500 focus:border-blue-500'
+              : 'focus:ring-green-500 focus:border-green-500'
+          }`}
         />
       </div>
       <button
         onClick={onAddTrip}
-        className={`mt-4 px-4 py-2 bg-${userColor}-600 text-white rounded-lg hover:bg-${userColor}-700 flex items-center`}
+        className={`mt-4 px-4 py-2 text-white rounded-lg flex items-center ${
+          selectedUser === 'Steven'
+            ? 'bg-blue-600 hover:bg-blue-700'
+            : 'bg-green-600 hover:bg-green-700'
+        }`}
       >
         <Plus className="w-4 h-4 mr-2" />
         Add Trip
