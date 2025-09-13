@@ -1,4 +1,4 @@
-export type User = 'Steven' | 'Partner';
+export type User = 'Cheryl' | 'Nigel';
 
 export type Trip = {
   id: string;

@@ -15,10 +15,10 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats, totalTrips, selec
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center">
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 ${
-            selectedUser === 'Steven' ? 'bg-blue-100' : 'bg-green-100'
+            selectedUser === 'Cheryl' ? 'bg-blue-100' : 'bg-green-100'
           }`}>
             <MapPin className={`w-6 h-6 ${
-              selectedUser === 'Steven' ? 'text-blue-600' : 'text-green-600'
+              selectedUser === 'Cheryl' ? 'text-blue-600' : 'text-green-600'
             }`} />
           </div>
           <div>
@@ -41,10 +41,10 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ stats, totalTrips, selec
       <div className="bg-white rounded-lg shadow-sm p-6">
         <div className="flex items-center">
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center mr-4 ${
-            selectedUser === 'Steven' ? 'bg-blue-100' : 'bg-green-100'
+            selectedUser === 'Cheryl' ? 'bg-blue-100' : 'bg-green-100'
           }`}>
             <Calendar className={`w-6 h-6 ${
-              selectedUser === 'Steven' ? 'text-blue-600' : 'text-green-600'
+              selectedUser === 'Cheryl' ? 'text-blue-600' : 'text-green-600'
             }`} />
           </div>
           <div>

@@ -25,19 +25,19 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
           value={editedTrip.user}
           onChange={(e) => setEditedTrip({ ...editedTrip, user: e.target.value as User })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            trip.user === 'Steven'
+            trip.user === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
         >
-          <option value="Steven">Steven</option>
-          <option value="Partner">Partner</option>
+          <option value="Cheryl">Cheryl</option>
+          <option value="Nigel">Nigel</option>
         </select>
         <select
           value={editedTrip.country}
           onChange={(e) => setEditedTrip({ ...editedTrip, country: e.target.value as 'Greece' | 'UK' })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            trip.user === 'Steven'
+            trip.user === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
@@ -50,7 +50,7 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
           value={editedTrip.departureDate}
           onChange={(e) => setEditedTrip({ ...editedTrip, departureDate: e.target.value })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            trip.user === 'Steven'
+            trip.user === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
@@ -60,7 +60,7 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
           value={editedTrip.arrivalDate}
           onChange={(e) => setEditedTrip({ ...editedTrip, arrivalDate: e.target.value })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            trip.user === 'Steven'
+            trip.user === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
@@ -72,7 +72,7 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
         value={editedTrip.notes || ''}
         onChange={(e) => setEditedTrip({ ...editedTrip, notes: e.target.value })}
         className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-          trip.user === 'Steven'
+          trip.user === 'Cheryl'
             ? 'focus:ring-blue-500 focus:border-blue-500'
             : 'focus:ring-green-500 focus:border-green-500'
         }`}
@@ -81,7 +81,7 @@ export const TripEditor: React.FC<TripEditorProps> = ({ trip, onSave, onCancel }
         <button
           onClick={() => onSave(editedTrip)}
           className={`px-4 py-2 text-white rounded-lg flex items-center ${
-            trip.user === 'Steven'
+            trip.user === 'Cheryl'
               ? 'bg-blue-600 hover:bg-blue-700'
               : 'bg-green-600 hover:bg-green-700'
           }`}

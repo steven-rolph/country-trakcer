@@ -81,7 +81,7 @@ export const TripList: React.FC<TripListProps> = ({
                     <div>
                       <div className="flex items-center space-x-2">
                         <p className="font-medium">{trip.country}</p>
-                        <span className={`px-2 py-1 text-xs rounded-full ${trip.user === 'Steven' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                        <span className={`px-2 py-1 text-xs rounded-full ${trip.user === 'Cheryl' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
                           {trip.user}
                         </span>
                       </div>

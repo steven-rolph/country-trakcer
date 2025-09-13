@@ -13,13 +13,13 @@ import { redisService } from './services/redis';
 
 const CountryTracker: React.FC = () => {
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User>('Steven');
+  const [selectedUser, setSelectedUser] = useState<User>('Cheryl');
   const [showResetModal, setShowResetModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle');
   const [editingTrip, setEditingTrip] = useState<string | null>(null);
   const [newTrip, setNewTrip] = useState<Partial<Trip>>({
-    user: 'Steven',
+    user: 'Cheryl',
     country: 'Greece',
     departureDate: '',
     arrivalDate: '',
@@ -29,7 +29,7 @@ const CountryTracker: React.FC = () => {
   // Load user preference and data on mount
   useEffect(() => {
     const savedUser = localStorage.getItem('selected-user') as User;
-    if (savedUser && (savedUser === 'Steven' || savedUser === 'Partner')) {
+    if (savedUser && (savedUser === 'Cheryl' || savedUser === 'Nigel')) {
       setSelectedUser(savedUser);
       setNewTrip(prev => ({ ...prev, user: savedUser }));
     }
@@ -61,7 +61,7 @@ const CountryTracker: React.FC = () => {
       // Migrate old trip data from traveler to user
       const migratedTrips = loadedTrips.map((trip: Trip & { traveler?: string }) => ({
         ...trip,
-        user: trip.user || (trip.traveler as User) || 'Steven' as User
+        user: trip.user || (trip.traveler as User) || 'Cheryl' as User
       }));
       setTrips(migratedTrips);
       setSyncStatus(status);
@@ -142,7 +142,7 @@ const CountryTracker: React.FC = () => {
         // Migrate old trip data from traveler to user
         const migratedTrips = (data.trips || []).map((trip: Trip & { traveler?: string }) => ({
           ...trip,
-          user: trip.user || (trip.traveler as User) || 'Steven' as User
+          user: trip.user || (trip.traveler as User) || 'Cheryl' as User
         }));
         setTrips(migratedTrips);
         alert('Data imported successfully');
@@ -184,7 +184,7 @@ const CountryTracker: React.FC = () => {
   };
 
   const getUserColor = (user: User): string => {
-    return user === 'Steven' ? 'border-l-blue-500' : 'border-l-green-500';
+    return user === 'Cheryl' ? 'border-l-blue-500' : 'border-l-green-500';
   };
 
   const handleUserChange = (user: User) => {
@@ -205,9 +205,9 @@ const CountryTracker: React.FC = () => {
 
       // Clear all state
       setTrips([]);
-      setSelectedUser('Steven');
+      setSelectedUser('Cheryl');
       setNewTrip({
-        user: 'Steven',
+        user: 'Cheryl',
         country: 'Greece',
         departureDate: '',
         arrivalDate: '',

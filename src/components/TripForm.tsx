@@ -36,7 +36,7 @@ export const TripForm: React.FC<TripFormProps> = ({
           value={newTrip.departureDate}
           onChange={(e) => onTripChange({ ...newTrip, departureDate: e.target.value })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            selectedUser === 'Steven'
+            selectedUser === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
@@ -47,7 +47,7 @@ export const TripForm: React.FC<TripFormProps> = ({
           value={newTrip.arrivalDate}
           onChange={(e) => onTripChange({ ...newTrip, arrivalDate: e.target.value })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            selectedUser === 'Steven'
+            selectedUser === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
@@ -58,7 +58,7 @@ export const TripForm: React.FC<TripFormProps> = ({
           value={newTrip.notes}
           onChange={(e) => onTripChange({ ...newTrip, notes: e.target.value })}
           className={`px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 ${
-            selectedUser === 'Steven'
+            selectedUser === 'Cheryl'
               ? 'focus:ring-blue-500 focus:border-blue-500'
               : 'focus:ring-green-500 focus:border-green-500'
           }`}
@@ -67,7 +67,7 @@ export const TripForm: React.FC<TripFormProps> = ({
       <button
         onClick={onAddTrip}
         className={`mt-4 px-4 py-2 text-white rounded-lg flex items-center ${
-          selectedUser === 'Steven'
+          selectedUser === 'Cheryl'
             ? 'bg-blue-600 hover:bg-blue-700'
             : 'bg-green-600 hover:bg-green-700'
         }`}

@@ -9,7 +9,7 @@ interface UserSelectorProps {
 }
 
 const getUserColor = (user: UserType): string => {
-  return user === 'Steven' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300';
+  return user === 'Cheryl' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-green-100 text-green-800 border-green-300';
 };
 
 const getSyncStatusInfo = (status: SyncStatus) => {
@@ -30,7 +30,7 @@ export const UserSelector: React.FC<UserSelectorProps> = ({
   onUserChange,
   syncStatus
 }) => {
-  const users: UserType[] = ['Steven', 'Partner'];
+  const users: UserType[] = ['Cheryl', 'Nigel'];
   const syncInfo = getSyncStatusInfo(syncStatus);
 
   return (
