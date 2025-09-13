@@ -252,11 +252,14 @@ const CountryTracker: React.FC = () => {
       // Clear cloud data if requested
       if (clearCloudData) {
         await redisService.clearAllData();
+        // Ensure empty trips array is saved to cloud after clearing
+        await redisService.saveTrips([]);
       }
 
       // Clear all state
       setTrips([]);
       setSelectedUser('Cheryl');
+      setSelectedYear(new Date().getFullYear());
       setNewTrip({
         user: 'Cheryl',
         country: 'Greece',
@@ -270,8 +273,10 @@ const CountryTracker: React.FC = () => {
       // Clear localStorage
       localStorage.removeItem('selected-user');
 
-      // Log the reset activity
-      await redisService.logActivity('reset_data', 'System', clearCloudData ? 'Full reset including cloud data' : 'Local reset only');
+      // Log the reset activity (but only if clearCloudData is false, since we cleared everything above)
+      if (!clearCloudData) {
+        await redisService.logActivity('reset_data', 'System', 'Local reset only');
+      }
 
       const message = clearCloudData 
         ? 'All data has been reset including cloud storage.'
