@@ -19,8 +19,4 @@ export type CountryStats = {
   UK: number;
 };
 
-export type UserStats = {
-  [user in User]: CountryStats;
-};
-
 export type SyncStatus = 'idle' | 'loading' | 'error' | 'connected';
