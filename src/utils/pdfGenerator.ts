@@ -101,21 +101,72 @@ export const generateTravelSummaryPDF = (trips: Trip[]): void => {
   const doc = new jsPDF();
   const yearSummaries = organizeDataByYear(trips);
   let yPosition = 20;
-  
+
   // Title
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
   doc.text('Travel Day Summary Report', 105, yPosition, { align: 'center' });
-  
+
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   doc.text(`Generated on ${new Date().toLocaleDateString('en-GB')}`, 105, yPosition + 8, { align: 'center' });
-  
+
   yPosition += 25;
+
+  // Summary section on initial page
+  if (yearSummaries.length > 1) {
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Overall Summary', 105, yPosition, { align: 'center' });
+    yPosition += 15;
+
+    const summaryData: any[] = [];
+
+    yearSummaries.forEach(yearSummary => {
+      const cherylTotal = yearSummary.users.Cheryl.totals.Greece + yearSummary.users.Cheryl.totals.UK;
+      const nigelTotal = yearSummary.users.Nigel.totals.Greece + yearSummary.users.Nigel.totals.UK;
+
+      const cherylBreakdown = `Greece: ${yearSummary.users.Cheryl.totals.Greece} days\nUK: ${yearSummary.users.Cheryl.totals.UK} days`;
+      const nigelBreakdown = `Greece: ${yearSummary.users.Nigel.totals.Greece} days\nUK: ${yearSummary.users.Nigel.totals.UK} days`;
+
+      summaryData.push([
+        yearSummary.year.toString(),
+        cherylBreakdown,
+        `${cherylTotal} days`,
+        nigelBreakdown,
+        `${nigelTotal} days`
+      ]);
+    });
+
+    autoTable(doc, {
+      startY: yPosition,
+      head: [['Year', 'Cheryl', 'Cheryl Total', 'Nigel', 'Nigel Total']],
+      body: summaryData,
+      theme: 'grid',
+      styles: {
+        fontSize: 10,
+        cellPadding: 4,
+        valign: 'top'
+      },
+      headStyles: {
+        fillColor: [64, 64, 64],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold'
+      },
+      columnStyles: {
+        1: { cellWidth: 40, halign: 'right' },
+        2: { halign: 'right' },
+        3: { cellWidth: 40, halign: 'right' },
+        4: { halign: 'right' }
+      }
+    });
+
+    yPosition = (doc as any).lastAutoTable.finalY + 20;
+  }
   
   yearSummaries.forEach((yearSummary, index) => {
-    // Add new page for each year (except the first one)
-    if (index > 0) {
+    // Add new page for each year (or if summary was shown on first page)
+    if (index > 0 || (index === 0 && yearSummaries.length > 1)) {
       doc.addPage();
       yPosition = 20;
     }
@@ -203,48 +254,6 @@ export const generateTravelSummaryPDF = (trips: Trip[]): void => {
       }
     });
   });
-  
-  // Summary page if multiple years
-  if (yearSummaries.length > 1) {
-    doc.addPage();
-    yPosition = 20;
-    
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Overall Summary', 105, yPosition, { align: 'center' });
-    yPosition += 15;
-    
-    const summaryData: any[] = [];
-    
-    yearSummaries.forEach(yearSummary => {
-      const cherylTotal = yearSummary.users.Cheryl.totals.Greece + yearSummary.users.Cheryl.totals.UK;
-      const nigelTotal = yearSummary.users.Nigel.totals.Greece + yearSummary.users.Nigel.totals.UK;
-      
-      summaryData.push([
-        yearSummary.year.toString(),
-        `${yearSummary.users.Cheryl.totals.Greece} / ${yearSummary.users.Cheryl.totals.UK}`,
-        cherylTotal.toString(),
-        `${yearSummary.users.Nigel.totals.Greece} / ${yearSummary.users.Nigel.totals.UK}`,
-        nigelTotal.toString()
-      ]);
-    });
-    
-    autoTable(doc, {
-      startY: yPosition,
-      head: [['Year', 'Cheryl (Greece/UK)', 'Cheryl Total', 'Nigel (Greece/UK)', 'Nigel Total']],
-      body: summaryData,
-      theme: 'grid',
-      styles: {
-        fontSize: 11,
-        cellPadding: 4,
-      },
-      headStyles: {
-        fillColor: [64, 64, 64],
-        textColor: [255, 255, 255],
-        fontStyle: 'bold'
-      }
-    });
-  }
   
   // Save the PDF
   const filename = `travel-summary-${new Date().toISOString().split('T')[0]}.pdf`;
