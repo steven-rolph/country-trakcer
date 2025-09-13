@@ -179,6 +179,13 @@ const CountryTracker: React.FC = () => {
     return stats;
   };
 
+  const getAllTrips = () => {
+    return trips.sort((a, b) => {
+      // Sort by departure date, newest first
+      return new Date(b.departureDate).getTime() - new Date(a.departureDate).getTime();
+    });
+  };
+
   const getFilteredTrips = (user: User) => {
     return trips
       .filter(trip => trip.user === user)
@@ -244,6 +251,7 @@ const CountryTracker: React.FC = () => {
 
   const stats = getCountryStats(selectedUser);
   const filteredTrips = getFilteredTrips(selectedUser);
+  const allTrips = getAllTrips();
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
@@ -275,7 +283,7 @@ const CountryTracker: React.FC = () => {
         />
 
         <TripList
-          trips={filteredTrips}
+          trips={allTrips}
           editingTrip={editingTrip}
           onEditTrip={setEditingTrip}
           onUpdateTrip={updateTrip}

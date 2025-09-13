@@ -37,10 +37,6 @@ export const TripList: React.FC<TripListProps> = ({
     });
   };
 
-  const sortedTrips = [...trips].sort((a, b) => 
-    new Date(b.departureDate).getTime() - new Date(a.departureDate).getTime()
-  );
-
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-6 border-b border-gray-200">
@@ -68,14 +64,14 @@ export const TripList: React.FC<TripListProps> = ({
         </div>
       </div>
       
-      {sortedTrips.length === 0 ? (
+      {trips.length === 0 ? (
         <div className="p-12 text-center text-gray-500">
           <MapPin className="w-12 h-12 mx-auto mb-4 text-gray-300" />
           <p>No trips recorded yet. Add your first trip above!</p>
         </div>
       ) : (
         <div className="divide-y divide-gray-200">
-          {sortedTrips.map((trip) => (
+          {trips.map((trip) => (
             <div key={trip.id} className="p-6">
               {editingTrip === trip.id ? (
                 <TripEditor
@@ -86,7 +82,9 @@ export const TripList: React.FC<TripListProps> = ({
               ) : (
                 <div className={`flex items-center justify-between border-l-4 ${getUserColor(trip.user)} pl-4`}>
                   <div className="flex items-center space-x-4">
-                    <div className={`w-3 h-3 rounded-full ${trip.country === 'Greece' ? 'bg-blue-500' : 'bg-red-500'}`}></div>
+                    <div className="text-lg">
+                      {trip.country === 'Greece' ? '🇬🇷' : '🇬🇧'}
+                    </div>
                     <div>
                       <div className="flex items-center space-x-2">
                         <p className="font-medium">{trip.country}</p>
